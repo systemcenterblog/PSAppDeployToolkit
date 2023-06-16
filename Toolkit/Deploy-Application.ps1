@@ -207,6 +207,7 @@ Try {
 
         ## <Perform Installation tasks here>
         #Execute-MSI -Action Install -Path 'MSINAME' -Parameter '/QN'
+        #Execute-Process -Path "$dirFiles\AppName.exe" -Paremters '/S' -WindowStyle 'Hidden'
 
         ##*===============================================
         ##* POST-INSTALLATION
@@ -249,7 +250,9 @@ Try {
         }
 
         ## <Perform Uninstallation tasks here>
-
+        #Execute-MSI -Action Uninstall -Path 'MSINAME' -Parameter '/QN'
+        # Remove-MSIApplications -Name 'MSINAME'  #Searches for the name and finds uninstall string
+        #Execute-Process -Path "$EnvProgramFiles\App\UninstallAppName.exe" -Paremters '/S' -WindowStyle 'Hidden'
 
         ##*===============================================
         ##* POST-UNINSTALLATION
