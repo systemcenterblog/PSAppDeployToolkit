@@ -107,19 +107,19 @@ Try {
     ##* VARIABLE DECLARATION
     ##*===============================================
     ## Variables: Application
-    [String]$appVendor = 'PS-PackageVendor' #Prefix PS help sort logs
-    [String]$appName = 'PackageName'
-    [String]$appVersion = 'PackageVersion'
+    [String]$appVendor = 'PS-Snow' #Prefix PS help sort logs
+    [String]$appName = 'Agent'
+    [String]$appVersion = '6.14.0'
     [String]$appArch = ''
     [String]$appLang = 'EN'
     [String]$appRevision = '01'
     [String]$appScriptVersion = '1.0.0'
-    [String]$appScriptDate = 'XX/XX/20XX'
+    [String]$appScriptDate = '16/06/2023'
     [String]$appScriptAuthor = 'JP - KCL'
     ##*===============================================
     ## Variables: Install Titles (Only set here to override defaults set by the toolkit)
     [String]$installName = ''
-    [String]$installTitle = 'PackageVendor PackageName PackageVersion'
+    [String]$installTitle = 'Snow Agent 6.14.0'
 
     ##* Do not modify section below
     #region DoNotModify
@@ -206,7 +206,19 @@ Try {
         }
 
         ## <Perform Installation tasks here>
-        #Execute-MSI -Action Install -Path 'MSINAME' -Parameter '/QN'
+
+        if ($Env:PROCESSOR_ARCHITECTURE -eq "amd64")
+{
+           
+    Execute-MSI -Action Install -Path 'KCL_snowagent-6.14.1-x64.msi'
+            
+        }
+        Elseif ($Env:PROCESSOR_ARCHITECTURE -eq "x86")
+        {
+          
+            Execute-MSI -Action Install -Path 'KCL_snowagent-6.14.1-x64.msi'
+        }
+        #Execute-MSI -Action Install -Path '$Agent' #-Parameter '/QN'
         #Execute-Process -Path "$dirFiles\AppName.exe" -Paremters '/S' -WindowStyle 'Hidden'
 
         ##*===============================================
@@ -215,7 +227,9 @@ Try {
         [String]$installPhase = 'Post-Installation'
 
         ## <Perform Post-Installation tasks here>
-
+        Execute-Process -Path $Env:ProgramFiles"\Snow Software\Inventory\Agent\snowagent.exe" -Paremters 'scan' -WindowStyle 'Hidden'
+        Execute-Process -Path $Env:ProgramFiles"\Snow Software\Inventory\Agent\snowagent.exe" -Paremters 'send' -WindowStyle 'Hidden'
+        
         ## Display a message at the end of the install
         If (-not $useDefaultMsi) {
             Show-InstallationPrompt -Message 'You can customize text to appear at the end of an install or remove it completely for unattended installations.' -ButtonRightText 'OK' -Icon Information -NoWait
