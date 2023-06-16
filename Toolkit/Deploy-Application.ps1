@@ -107,19 +107,19 @@ Try {
     ##* VARIABLE DECLARATION
     ##*===============================================
     ## Variables: Application
-    [String]$appVendor = ''
-    [String]$appName = ''
-    [String]$appVersion = ''
+    [String]$appVendor = 'PS-PackageVendor' #Prefix PS help sort logs
+    [String]$appName = 'PackageName'
+    [String]$appVersion = 'PackageVersion'
     [String]$appArch = ''
     [String]$appLang = 'EN'
     [String]$appRevision = '01'
     [String]$appScriptVersion = '1.0.0'
     [String]$appScriptDate = 'XX/XX/20XX'
-    [String]$appScriptAuthor = '<author name>'
+    [String]$appScriptAuthor = 'JP - KCL'
     ##*===============================================
     ## Variables: Install Titles (Only set here to override defaults set by the toolkit)
     [String]$installName = ''
-    [String]$installTitle = ''
+    [String]$installTitle = 'PackageVendor PackageName PackageVersion'
 
     ##* Do not modify section below
     #region DoNotModify
@@ -182,7 +182,7 @@ Try {
         [String]$installPhase = 'Pre-Installation'
 
         ## Show Welcome Message, close Internet Explorer if required, allow up to 3 deferrals, verify there is enough disk space to complete the install, and persist the prompt
-        Show-InstallationWelcome -CloseApps 'iexplore' -AllowDefer -DeferTimes 3 -CheckDiskSpace -PersistPrompt
+        Show-InstallationWelcome -CloseApps 'MSEdge' -AllowDefer -DeferTimes 3 -CheckDiskSpace -PersistPrompt
 
         ## Show Progress Message (with the default message)
         Show-InstallationProgress
@@ -206,7 +206,7 @@ Try {
         }
 
         ## <Perform Installation tasks here>
-
+        #Execute-MSI -Action Install -Path 'MSINAME' -Parameter '/QN'
 
         ##*===============================================
         ##* POST-INSTALLATION
@@ -227,7 +227,7 @@ Try {
         [String]$installPhase = 'Pre-Uninstallation'
 
         ## Show Welcome Message, close Internet Explorer with a 60 second countdown before automatically closing
-        Show-InstallationWelcome -CloseApps 'iexplore' -CloseAppsCountdown 60
+        Show-InstallationWelcome -CloseApps 'msedge' -CloseAppsCountdown 60
 
         ## Show Progress Message (with the default message)
         Show-InstallationProgress

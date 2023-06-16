@@ -75,7 +75,7 @@
     <MSI_Options>
         <MSI_LoggingOptions>/L*v</MSI_LoggingOptions>
         <!-- Logging level used for MSI logging. -->
-        <MSI_LogPath>$envWinDir\Logs\Software</MSI_LogPath>
+        <MSI_LogPath>$envProgramData\Microsoft\IntuneManagementExtension\Logs</MSI_LogPath>
         <!-- Log path used for MSI logging. -->
         <MSI_LogPathNoAdminRights>$envProgramData\Logs\Software</MSI_LogPathNoAdminRights>
         <!-- Log path used for MSI logging when RequireAdmin is False. -->
