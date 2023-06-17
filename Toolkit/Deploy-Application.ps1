@@ -196,6 +196,7 @@ Try {
         [String]$installPhase = 'Installation'
 
         ## Handle Zero-Config MSI Installations
+       <#
         If ($useDefaultMsi) {
             [Hashtable]$ExecuteDefaultMSISplat = @{ Action = 'Install'; Path = $defaultMsiFile }; If ($defaultMstFile) {
                 $ExecuteDefaultMSISplat.Add('Transform', $defaultMstFile)
@@ -204,7 +205,7 @@ Try {
                 $defaultMspFiles | ForEach-Object { Execute-MSI -Action 'Patch' -Path $_ }
             }
         }
-
+        #>
         ## <Perform Installation tasks here>
 
         if ($Env:PROCESSOR_ARCHITECTURE -eq "amd64")
@@ -216,10 +217,10 @@ Try {
         Elseif ($Env:PROCESSOR_ARCHITECTURE -eq "x86")
         {
           
-            Execute-MSI -Action Install -Path 'KCL_snowagent-6.14.1-x64.msi'
+            Execute-MSI -Action Install -Path 'KCL_snowagent-6.14.1.x86.msi'
         }
         #Execute-MSI -Action Install -Path '$Agent' #-Parameter '/QN'
-        #Execute-Process -Path "$dirFiles\AppName.exe" -Paremters '/S' -WindowStyle 'Hidden'
+        #Execute-Process -Path "$dirFiles\AppName.exe" -Parameter '/S' -WindowStyle 'Hidden'
 
         ##*===============================================
         ##* POST-INSTALLATION
@@ -227,12 +228,12 @@ Try {
         [String]$installPhase = 'Post-Installation'
 
         ## <Perform Post-Installation tasks here>
-        Execute-Process -Path $Env:ProgramFiles"\Snow Software\Inventory\Agent\snowagent.exe" -Paremters 'scan' -WindowStyle 'Hidden'
-        Execute-Process -Path $Env:ProgramFiles"\Snow Software\Inventory\Agent\snowagent.exe" -Paremters 'send' -WindowStyle 'Hidden'
+        Execute-Process -Path $Env:ProgramFiles"\Snow Software\Inventory\Agent\snowagent.exe" -Parameter 'scan' -WindowStyle 'Hidden'
+        Execute-Process -Path $Env:ProgramFiles"\Snow Software\Inventory\Agent\snowagent.exe" -Parameter 'send' -WindowStyle 'Hidden'
         
         ## Display a message at the end of the install
         If (-not $useDefaultMsi) {
-            Show-InstallationPrompt -Message 'You can customize text to appear at the end of an install or remove it completely for unattended installations.' -ButtonRightText 'OK' -Icon Information -NoWait
+            #Show-InstallationPrompt -Message 'You can customize text to appear at the end of an install or remove it completely for unattended installations.' -ButtonRightText 'OK' -Icon Information -NoWait
         }
     }
     ElseIf ($deploymentType -ieq 'Uninstall') {
@@ -265,7 +266,7 @@ Try {
 
         ## <Perform Uninstallation tasks here>
         #Execute-MSI -Action Uninstall -Path 'MSINAME' -Parameter '/QN'
-        # Remove-MSIApplications -Name 'MSINAME'  #Searches for the name and finds uninstall string
+         Remove-MSIApplications -Name 'Snow Inventory Agent for Windows'  #Searches for the name and finds uninstall string
         #Execute-Process -Path "$EnvProgramFiles\App\UninstallAppName.exe" -Paremters '/S' -WindowStyle 'Hidden'
 
         ##*===============================================
