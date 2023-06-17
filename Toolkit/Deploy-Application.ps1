@@ -196,7 +196,7 @@ Try {
         [String]$installPhase = 'Installation'
 
         ## Handle Zero-Config MSI Installations
-       <#
+       
         If ($useDefaultMsi) {
             [Hashtable]$ExecuteDefaultMSISplat = @{ Action = 'Install'; Path = $defaultMsiFile }; If ($defaultMstFile) {
                 $ExecuteDefaultMSISplat.Add('Transform', $defaultMstFile)
@@ -205,7 +205,7 @@ Try {
                 $defaultMspFiles | ForEach-Object { Execute-MSI -Action 'Patch' -Path $_ }
             }
         }
-        #>
+        
         ## <Perform Installation tasks here>
 
         if ($Env:PROCESSOR_ARCHITECTURE -eq "amd64")
