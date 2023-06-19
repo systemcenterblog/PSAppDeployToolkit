@@ -208,7 +208,7 @@ Try {
         ## <Perform Installation tasks here>
         #Execute-MSI -Action Install -Path 'MSINAME' -Parameter '/QN'
         #Execute-Process -Path "$dirFiles\AppName.exe" -Paremters '/S' -WindowStyle 'Hidden'
-
+        Execute-MSI -Action Install -Path 'MestReNova-14.3.1-31739_x64.msi'
 
   
         ##*===============================================
@@ -217,9 +217,9 @@ Try {
         [String]$installPhase = 'Post-Installation'
 
         ## <Perform Post-Installation tasks here>
-        Copy-File -Path "$dirSupportFiles\LicenseFiles\*.*" -Destination "$env:ProgramFiles\Mestrelab Research S.L\MestReNova\licenses"
-        Remove-File -Path '$env:Public\Desktop\MestReNova x64.lnk'
-        
+        Copy-File -Path "$dirFiles\LicenseFiles\*.*" -Destination "$env:ProgramFiles\Mestrelab Research S.L\MestReNova\licenses"
+        Remove-File -Path 'C:\Users\Public\Desktop\MestReNova x64.lnk'
+                
         ## Display a message at the end of the install
         If (-not $useDefaultMsi) {
             Show-InstallationPrompt -Message 'You can customize text to appear at the end of an install or remove it completely for unattended installations.' -ButtonRightText 'OK' -Icon Information -NoWait
