@@ -70,5 +70,5 @@ if (Get-Content -Path "$Application\Deploy-Application.ps1" | Select-String "win
 
 }
 
-# Begin
+# Begin#
 Start-Process -FilePath .\$Application\Deploy-Application.exe -WindowStyle Maximized -Wait
