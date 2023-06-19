@@ -231,7 +231,7 @@ Try {
         Execute-Process -Path $Env:ProgramFiles"\Snow Software\Inventory\Agent\snowagent.exe" -Parameter 'scan' -WindowStyle 'Hidden'
         Execute-Process -Path $Env:ProgramFiles"\Snow Software\Inventory\Agent\snowagent.exe" -Parameter 'send' -WindowStyle 'Hidden'
         
-        ## Display a message at the end of the install
+        ## Display a message at the end of the install #
         If (-not $useDefaultMsi) {
             #Show-InstallationPrompt -Message 'You can customize text to appear at the end of an install or remove it completely for unattended installations.' -ButtonRightText 'OK' -Icon Information -NoWait
         }
