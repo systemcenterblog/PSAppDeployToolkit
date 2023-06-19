@@ -107,19 +107,19 @@ Try {
     ##* VARIABLE DECLARATION
     ##*===============================================
     ## Variables: Application
-    [String]$appVendor = 'PS-PackageVendor' #Prefix PS help sort logs
-    [String]$appName = 'PackageName'
-    [String]$appVersion = 'PackageVersion'
+    [String]$appVendor = 'PS-Mest' #Prefix PS help sort logs
+    [String]$appName = 'ReNova'
+    [String]$appVersion = '14.3.1-31739_x64'
     [String]$appArch = ''
     [String]$appLang = 'EN'
     [String]$appRevision = '01'
     [String]$appScriptVersion = '1.0.0'
-    [String]$appScriptDate = 'XX/XX/20XX'
+    [String]$appScriptDate = '19/06/2023'
     [String]$appScriptAuthor = 'JP - KCL'
     ##*===============================================
     ## Variables: Install Titles (Only set here to override defaults set by the toolkit)
     [String]$installName = ''
-    [String]$installTitle = 'PackageVendor PackageName PackageVersion'
+    [String]$installTitle = 'Mest ReNova 14.3.1-31739_x64'
 
     ##* Do not modify section below
     #region DoNotModify
@@ -218,6 +218,7 @@ Try {
 
         ## <Perform Post-Installation tasks here>
         Copy-File -Path "$dirSupportFiles\LicenseFiles\*.*" -Destination "$env:ProgramFiles\Mestrelab Research S.L\MestReNova\licenses"
+        Remove-File -Path '$env:Public\Desktop\MestReNova x64.lnk'
         
         ## Display a message at the end of the install
         If (-not $useDefaultMsi) {

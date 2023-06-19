@@ -79,11 +79,11 @@
         <!-- Log path used for MSI logging. -->
         <MSI_LogPathNoAdminRights>$envProgramData\Logs\Software</MSI_LogPathNoAdminRights>
         <!-- Log path used for MSI logging when RequireAdmin is False. -->
-        <MSI_InstallParams>REBOOT=ReallySuppress DESKTOPSHORTCUTS=0 /QB-!</MSI_InstallParams>
+        <MSI_InstallParams>REBOOT=ReallySuppress /QB-!</MSI_InstallParams>
         <!-- Installation parameters used for non-silent MSI actions. -->
-        <MSI_SilentParams>REBOOT=ReallySuppress DESKTOPSHORTCUTS=0 /QN</MSI_SilentParams>
+        <MSI_SilentParams>REBOOT=ReallySuppress /QN</MSI_SilentParams>
         <!-- Installation parameters used for silent MSI actions. -->
-        <MSI_UninstallParams>REBOOT=ReallySuppress DESKTOPSHORTCUTS=0 /QN</MSI_UninstallParams>
+        <MSI_UninstallParams>REBOOT=ReallySuppress /QN</MSI_UninstallParams>
         <!-- Installation parameters used for MSI uninstall actions. -->
         <MSI_MutexWaitTime>600</MSI_MutexWaitTime>
         <!-- The length of time in seconds to wait for the MSI installer service to become available. Default is 600 seconds (10 minutes) -->
