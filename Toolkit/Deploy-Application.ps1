@@ -209,13 +209,16 @@ Try {
         #Execute-MSI -Action Install -Path 'MSINAME' -Parameter '/QN'
         #Execute-Process -Path "$dirFiles\AppName.exe" -Paremters '/S' -WindowStyle 'Hidden'
 
+
+  
         ##*===============================================
         ##* POST-INSTALLATION
         ##*===============================================
         [String]$installPhase = 'Post-Installation'
 
         ## <Perform Post-Installation tasks here>
-
+        Copy-File -Path "$dirSupportFiles\LicenseFiles\*.*" -Destination "$env:ProgramFiles\Mestrelab Research S.L\MestReNova\licenses"
+        
         ## Display a message at the end of the install
         If (-not $useDefaultMsi) {
             Show-InstallationPrompt -Message 'You can customize text to appear at the end of an install or remove it completely for unattended installations.' -ButtonRightText 'OK' -Icon Information -NoWait
@@ -260,6 +263,8 @@ Try {
         [String]$installPhase = 'Post-Uninstallation'
 
         ## <Perform Post-Uninstallation tasks here>
+        Remove-Folder -Path "$env:ProgramFiles\Mestrelab Research S.L\MestReNova\licenses"
+
 
 
     }
