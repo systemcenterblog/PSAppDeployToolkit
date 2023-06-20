@@ -107,19 +107,19 @@ Try {
     ##* VARIABLE DECLARATION
     ##*===============================================
     ## Variables: Application
-    [String]$appVendor = 'PS-PackageVendor' #Prefix PS help sort logs
-    [String]$appName = 'PackageName'
-    [String]$appVersion = 'PackageVersion'
+    [String]$appVendor = 'PS-Microsoft' #Prefix PS help sort logs
+    [String]$appName = 'OneDrive UACPrompt'
+    [String]$appVersion = '1.0'
     [String]$appArch = ''
     [String]$appLang = 'EN'
     [String]$appRevision = '01'
     [String]$appScriptVersion = '1.0.0'
-    [String]$appScriptDate = 'XX/XX/20XX'
+    [String]$appScriptDate = '20/06/20XX'
     [String]$appScriptAuthor = 'JP - KCL'
     ##*===============================================
     ## Variables: Install Titles (Only set here to override defaults set by the toolkit)
     [String]$installName = ''
-    [String]$installTitle = 'PackageVendor PackageName PackageVersion'
+    [String]$installTitle = 'Microsoft OneDrive UACPrompt 1.0'
 
     ##* Do not modify section below
     #region DoNotModify
@@ -208,6 +208,80 @@ Try {
         ## <Perform Installation tasks here>
         #Execute-MSI -Action Install -Path 'MSINAME' -Parameter '/QN'
         #Execute-Process -Path "$dirFiles\AppName.exe" -Paremters '/S' -WindowStyle 'Hidden'
+
+        # OneDriveSetup.exe is owned by TrustedInstaller -- take ownership and replace file
+        #OneDriveSetup.exe /allusers
+    $Splat = @{
+        Path = "$envSystem32Directory\takeown.exe"
+        Parameters = "/f $envWinDir\SysWOW64\OneDriveSetup.exe"
+    }
+    Execute-Process @Splat
+    
+    # Grant full permissions for user account running this process
+    $Splat = @{
+        Path = "$envSystem32Directory\icacls.exe" 
+        Parameters = "$envSystemRoot\SysWOW64\OneDriveSetup.exe /Grant `"$ProcessNTAccount`"`:(F)"
+    }
+    Execute-Process @Splat
+    
+    # Replace OneDriveSetup.exe
+    $Splat = @{
+        Path = Join-Path -Path $dirFiles -ChildPath "OneDriveSetup.exe"
+        Destination = Join-Path -Path $envWinDir -ChildPath "\SysWOW64\OneDriveSetup.exe"
+    }
+    Copy-File @Splat
+    
+    # Set ownership back to TrustedInstaller
+    $Splat = @{
+        Path = "$envSystem32Directory\icacls.exe" 
+        Parameters = "$envWinDir\SysWOW64\OneDriveSetup.exe /setowner `"NT SERVICE\TrustedInstaller`""
+    }
+    Execute-Process @Splat
+    
+    # Restore default permissions
+    If ($IsLocalSystemAccount) {
+        # SYSTEM ACCOUNT HAS READ AND EXECUTE PERMISSIONS BY DEFAULT
+        $Splat = @{
+            Path = "$envSystem32Directory\icacls.exe" 
+            Parameters = "$envWinDir\SysWOW64\OneDriveSetup.exe /Grant:r `"$LocalSystemNTAccount`"`:(RX)"
+        }
+    } else {
+        $Splat = @{
+            Path = "$envSystem32Directory\icacls.exe" 
+            Parameters = "$envWinDir\SysWOW64\OneDriveSetup.exe /remove:g `"$ProcessNTAccount`""
+        }
+    }
+    Execute-Process @Splat
+
+    # Get each user profile SID and Path to the profile
+$UserProfiles = Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\*" | Where {$_.PSChildName -match "S-1-5-21-(\d+-?){4}$" } | Select-Object @{Name="SID"; Expression={$_.PSChildName}}, @{Name="UserHive";Expression={"$($_.ProfileImagePath)\NTuser.dat"}}
+
+# Add in the .DEFAULT User Profile
+$DefaultProfile = "" | Select-Object SID, UserHive
+$DefaultProfile.SID = ".DEFAULT"
+$DefaultProfile.Userhive = "C:\Users\Public\NTuser.dat"
+$UserProfiles += $DefaultProfile
+
+# Loop through each profile on the machine</p>
+Foreach ($UserProfile in $UserProfiles) {
+    # Load User ntuser.dat if it's not already loaded
+    If (($ProfileWasLoaded = Test-Path Registry::HKEY_USERS\$($UserProfile.SID)) -eq $false) {
+        Start-Process -FilePath "CMD.EXE" -ArgumentList "/C REG.EXE LOAD HKU\$($UserProfile.SID) $($UserProfile.UserHive)" -Wait -WindowStyle Hidden
+    }
+
+    # Manipulate the registry
+$key = "Registry::HKEY_USERS\$($UserProfile.SID)\SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
+#New-Item -Path $key -Force | Out-Null
+New-ItemProperty -Path $key -Name "OneDriveSetup" -Value "" -PropertyType STRING -Force | Out-Null
+
+ }
+
+# Unload NTuser.dat        
+If ($ProfileWasLoaded -eq $false) {
+    [gc]::Collect()
+    Start-Sleep 1
+    Start-Process -FilePath "CMD.EXE" -ArgumentList "/C REG.EXE UNLOAD HKU\$($UserProfile.SID)" -Wait -WindowStyle Hidden| Out-Null
+}
 
         ##*===============================================
         ##* POST-INSTALLATION
