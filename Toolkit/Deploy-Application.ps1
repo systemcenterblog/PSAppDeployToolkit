@@ -107,19 +107,19 @@ Try {
     ##* VARIABLE DECLARATION
     ##*===============================================
     ## Variables: Application
-    [String]$appVendor = 'PS-PackageVendor' #Prefix PS help sort logs
-    [String]$appName = 'PackageName'
-    [String]$appVersion = 'PackageVersion'
+    [String]$appVendor = 'PS-Uninstall Oracle' #Prefix PS help sort logs
+    [String]$appName = 'Java'
+    [String]$appVersion = 'JRE'
     [String]$appArch = ''
     [String]$appLang = 'EN'
     [String]$appRevision = '01'
     [String]$appScriptVersion = '1.0.0'
-    [String]$appScriptDate = 'XX/XX/20XX'
+    [String]$appScriptDate = '21/06/2023'
     [String]$appScriptAuthor = 'JP - KCL'
     ##*===============================================
     ## Variables: Install Titles (Only set here to override defaults set by the toolkit)
     [String]$installName = ''
-    [String]$installTitle = 'PackageVendor PackageName PackageVersion'
+    [String]$installTitle = 'Uninstall Oracle Java JRE'
 
     ##* Do not modify section below
     #region DoNotModify
