@@ -182,7 +182,7 @@ Try {
         [String]$installPhase = 'Pre-Installation'
 
         ## Show Welcome Message, close Internet Explorer if required, allow up to 3 deferrals, verify there is enough disk space to complete the install, and persist the prompt
-        Show-InstallationWelcome -CloseApps 'MSEdge' -AllowDefer -DeferTimes 3 -CheckDiskSpace -PersistPrompt
+        Show-InstallationWelcome -CloseApps 'iexplore' -AllowDefer -DeferTimes 3 -CheckDiskSpace -PersistPrompt
 
         ## Show Progress Message (with the default message)
         Show-InstallationProgress
@@ -208,6 +208,7 @@ Try {
         ## <Perform Installation tasks here>
         #Execute-MSI -Action Install -Path 'MSINAME' -Parameter '/QN'
         #Execute-Process -Path "$dirFiles\AppName.exe" -Paremters '/S' -WindowStyle 'Hidden'
+        Remove-MSIApplications -Name 'Java 8 Update'
 
         ##*===============================================
         ##* POST-INSTALLATION
@@ -228,7 +229,7 @@ Try {
         [String]$installPhase = 'Pre-Uninstallation'
 
         ## Show Welcome Message, close Internet Explorer with a 60 second countdown before automatically closing
-        Show-InstallationWelcome -CloseApps 'msedge' -CloseAppsCountdown 60
+        Show-InstallationWelcome -CloseApps 'iexplore' -CloseAppsCountdown 60
 
         ## Show Progress Message (with the default message)
         Show-InstallationProgress
@@ -253,6 +254,7 @@ Try {
         #Execute-MSI -Action Uninstall -Path 'MSINAME' -Parameter '/QN'
         # Remove-MSIApplications -Name 'MSINAME'  #Searches for the name and finds uninstall string
         #Execute-Process -Path "$EnvProgramFiles\App\UninstallAppName.exe" -Paremters '/S' -WindowStyle 'Hidden'
+        
         
         
         ##*===============================================
