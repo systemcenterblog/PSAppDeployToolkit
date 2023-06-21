@@ -253,7 +253,8 @@ Try {
         #Execute-MSI -Action Uninstall -Path 'MSINAME' -Parameter '/QN'
         # Remove-MSIApplications -Name 'MSINAME'  #Searches for the name and finds uninstall string
         #Execute-Process -Path "$EnvProgramFiles\App\UninstallAppName.exe" -Paremters '/S' -WindowStyle 'Hidden'
-
+        
+        
         ##*===============================================
         ##* POST-UNINSTALLATION
         ##*===============================================
